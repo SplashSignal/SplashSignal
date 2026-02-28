@@ -136,7 +136,7 @@ async function startServer() {
       db.prepare('INSERT INTO users (id, username, password_hash) VALUES (?, ?, ?)')
         .run(id, username, hash);
       const token = jwt.sign({ userId: id }, JWT_SECRET);
-      res.json({ success: true, token, userId: id });
+      res.json({ success: true, token, userId: id, username });
     } catch (e) {
       res.status(400).json({ error: 'Username already exists' });
     }
@@ -149,7 +149,7 @@ async function startServer() {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
     const token = jwt.sign({ userId: user.id }, JWT_SECRET);
-    res.json({ success: true, token, userId: user.id });
+    res.json({ success: true, token, userId: user.id, username: user.username });
   });
 
   // --- Analysis Routes ---

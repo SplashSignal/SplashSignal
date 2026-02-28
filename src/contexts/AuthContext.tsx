@@ -31,6 +31,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
 
     const data = await response.json();
+    if (!response.ok) {
+  // backend usually returns { error: "..." }
+  throw new Error(data?.error || "Authentication failed");
+}
+
+if (!data?.username || !data?.token) {
+  throw new Error("Bad auth response: missing username/token");
+}
     const newUser: User = {
       username: data.username,
       login: data.username,
